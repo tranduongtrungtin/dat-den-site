@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dat-den.pages.dev/sitemap.xml
+Sitemap: https://datden.vn/sitemap.xml
