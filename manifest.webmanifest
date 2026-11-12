@@ -1,0 +1,12 @@
+{
+  "name": "Đất Đen",
+  "short_name": "Đất Đen",
+  "description": "Tri thức từ đất, giá trị cho tương lai",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F1E9",
+  "theme_color": "#174D38",
+  "icons": [
+    { "src": "/dat-den-emblem.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }
+  ]
+}
