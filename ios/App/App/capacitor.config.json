@@ -1,0 +1,8 @@
+{
+	"appId": "vn.datden.app",
+	"appName": "Đất Đen",
+	"webDir": "dist",
+	"packageClassList": [
+		"AppPlugin"
+	]
+}
