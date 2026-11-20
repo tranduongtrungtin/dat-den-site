@@ -1,0 +1,6 @@
+# Xcode build artifacts
+ios/App/build/
+ios/App/Pods/
+DerivedData/
+xcuserdata/
+*.xcuserstate

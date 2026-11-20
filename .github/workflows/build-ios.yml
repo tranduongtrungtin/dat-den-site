@@ -1,0 +1,52 @@
+name: Build iOS IPA (unsigned)
+
+# Build iOS .ipa KHONG KY (unsigned) cho app Dat Den (Capacitor).
+# File .ipa nay KHONG cai duoc tren iPhone that (can chu ky Apple Developer).
+# De co ban cai duoc: can Apple Developer 99 USD/nam -> ky + phan phoi qua App Store/TestFlight.
+# Workflow nay chi chung minh project build duoc va tao artifact that de kiem tra.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ios-build]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: |
+          ls /Applications/ | grep -i xcode
+          xcodebuild -version
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer 2>/dev/null || sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer 2>/dev/null || echo "dung Xcode mac dinh"
+          xcodebuild -version
+
+      - name: Resolve Swift Package dependencies
+        run: xcodebuild -resolvePackageDependencies -project ios/App/App.xcodeproj -scheme App
+
+      - name: Archive (unsigned)
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath build/App.xcarchive archive \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" DEVELOPMENT_TEAM=""
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/App.xcarchive/Products/Applications/App.app Payload/
+          zip -r dat-den-app-1.1.ipa Payload
+          ls -lh dat-den-app-1.1.ipa
+          unzip -l dat-den-app-1.1.ipa | head -20
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dat-den-app-1.1.ipa
+          path: dat-den-app-1.1.ipa
+          if-no-files-found: error
+          retention-days: 30
